@@ -24,4 +24,4 @@ def test_books_without_token():
     """不带 token 查列表，应该 401"""
     api = BookApi()  # 故意不带 token
     resp = api.list_books()
-    assert resp.status_code == 400
+    assert resp.status_code == 401
