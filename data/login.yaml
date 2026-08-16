@@ -1,0 +1,33 @@
+# 登录接口测试数据
+# name：用例名（报告中显示用）
+# username/password：登录参数
+# code：期望状态码
+login:
+  - name: "正确账号登录"
+    username: "admin"
+    password: "123456"
+    code: 200
+  - name: "第二个用户登录"
+    username: "test"
+    password: "123456"
+    code: 200
+  - name: "密码错误"
+    username: "admin"
+    password: "wrong"
+    code: 401
+  - name: "用户名不存在"
+    username: "nobody"
+    password: "123456"
+    code: 401
+  - name: "用户名为空"
+    username: ""
+    password: "123456"
+    code: 401
+  - name: "密码为空"
+    username: "admin"
+    password: ""
+    code: 401
+  - name: "请求体为空"
+    username: null
+    password: null
+    code: 401

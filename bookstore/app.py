@@ -59,6 +59,10 @@ def login():
     username = data.get("username")
     password = data.get("password")
 
+    # 用户名或密码为空 → 401（修复空值登录漏洞）
+    if not username or not password:
+        return jsonify({"code": 1, "message": "用户名或密码错误"}), 401
+
     # 用户名或密码错误（包括用户不存在），统一返回 401
     if users.get(username) != password:
         return jsonify({"code": 1, "message": "用户名或密码错误"}), 401
@@ -67,7 +71,6 @@ def login():
     token = uuid.uuid4().hex
     valid_tokens.add(token)
     return jsonify({"code": 0, "message": "success", "token": token})
-
 
 # ============ 接口 2：获取图书列表 ============
 
