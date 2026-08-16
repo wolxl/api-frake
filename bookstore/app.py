@@ -158,6 +158,89 @@ def delete_book(book_id):
     return jsonify({"code": 0, "message": "删除成功"})
 
 
+# ============ 模拟数据：购物车 & 订单 ============
+cart = {}          # {book_id: 数量}
+orders = {}        # {order_id: 订单详情}
+next_order_id = 1
+
+
+# ============ 接口 7：加入购物车 ============
+@app.post("/api/cart")
+def add_to_cart():
+    if not check_auth():
+        return unauthorized()
+
+    data = request.get_json(silent=True) or {}
+    book_id = data.get("book_id")
+    quantity = data.get("quantity")
+
+    # 业务规则：book_id 必须存在，quantity 必须是正整数
+    if book_id not in books:
+        return jsonify({"code": 400, "message": "图书不存在"}), 400
+    if not isinstance(quantity, int) or quantity <= 0:
+        return jsonify({"code": 400, "message": "quantity必须是正整数"}), 400
+
+    cart[book_id] = cart.get(book_id, 0) + quantity
+    return jsonify({"code": 0, "message": "加购成功", "data": cart})
+
+
+# ============ 接口 8：查看购物车 ============
+@app.get("/api/cart")
+def get_cart():
+    if not check_auth():
+        return unauthorized()
+    return jsonify({"code": 0, "data": cart})
+
+
+# ============ 接口 9：提交订单 ============
+@app.post("/api/orders")
+def create_order():
+    if not check_auth():
+        return unauthorized()
+
+    data = request.get_json(silent=True) or {}
+    items = data.get("items") or []
+
+    # 业务规则：items 不能为空，每项 book 必须存在且数量为正整数
+    if not items:
+        return jsonify({"code": 400, "message": "items不能为空"}), 400
+
+    total = 0
+    for item in items:
+        book_id = item.get("book_id")
+        quantity = item.get("quantity")
+        if book_id not in books:
+            return jsonify({"code": 400, "message": "图书不存在"}), 400
+        if not isinstance(quantity, int) or quantity <= 0:
+            return jsonify({"code": 400, "message": "quantity必须是正整数"}), 400
+        total += books[book_id]["price"] * quantity
+
+    global next_order_id
+    order = {
+        "id": next_order_id,
+        "items": items,
+        "total_price": total,
+        "status": "created",
+    }
+    orders[next_order_id] = order
+    next_order_id += 1
+
+    # 下单成功，清空购物车
+    cart.clear()
+    return jsonify({"code": 0, "message": "下单成功", "data": order}), 201
+
+
+# ============ 接口 10：查询订单 ============
+@app.get("/api/orders/<int:order_id>")
+def get_order(order_id):
+    if not check_auth():
+        return unauthorized()
+
+    order = orders.get(order_id)
+    if order is None:
+        return jsonify({"code": 404, "message": "订单不存在"}), 404
+    return jsonify({"code": 0, "data": order})
+
+
 if __name__ == "__main__":
     app.run(debug=True)
-

@@ -28,3 +28,19 @@ class BookApi:
     def delete_book(self, book_id):
         """删除图书"""
         return self.req.delete(f"/api/books/{book_id}")
+
+    def add_to_cart(self, book_id, quantity):
+        """加入购物车"""
+        return self.req.post("/api/cart", {"book_id": book_id, "quantity": quantity})
+
+    def get_cart(self):
+        """查看购物车"""
+        return self.req.get("/api/cart")
+
+    def create_order(self, items):
+        """提交订单：items 形如 [{"book_id": 1, "quantity": 2}]"""
+        return self.req.post("/api/orders", {"items": items})
+
+    def get_order(self, order_id):
+        """查询订单"""
+        return self.req.get(f"/api/orders/{order_id}")
