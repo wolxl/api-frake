@@ -1,6 +1,6 @@
-# 电商下单链路接口自动化测试框架
+# 商城系统全流程接口自动化测试框架
 
-基于 Python + pytest 的接口自动化测试框架，覆盖"登录 → 图书管理 → 购物车 → 下单 → 订单查询"完整业务链路。
+基于 Python + pytest 的接口自动化测试框架，覆盖"登录 → 商品管理 → 购物车 → 下单（含库存校验）→ 订单查询"完整电商业务链路。
 
 ## 技术栈
 
@@ -10,20 +10,31 @@ Python · pytest · requests · yaml · Allure · Docker · GitHub Actions · Je
 
 ```
 ├── base/          # 请求封装层：get/post/put/delete、token 注入
-├── api/           # 接口层：每个接口一个方法
+├── api/           # 接口层：每个接口一个方法（MallApi）
 ├── data/          # 测试数据（yaml 数据驱动）
-├── testcases/     # 用例层：业务场景 + 四层断言
-├── bookstore/     # 待测系统（Flask 图书商城 API）
+├── testcases/     # 用例层：商品 / 购物车 / 订单 / 全流程
+├── bookstore/     # 待测系统（Flask 在线商城 API）
 └── .github/       # CI 工作流
 ```
+
+## 待测系统接口
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| POST | /api/login | 登录，返回 token |
+| GET/POST | /api/products | 商品列表 / 新增商品 |
+| GET/PUT/DELETE | /api/products/{id} | 商品详情 / 修改 / 删除 |
+| POST/GET | /api/cart | 加购（校验库存）/ 查看购物车 |
+| POST | /api/orders | 提交订单（校验并扣减库存） |
+| GET | /api/orders/{id} | 查询订单 |
 
 ## 快速开始
 
 ### 方式一：Docker 启动待测系统（推荐）
 
 ```bash
-docker build -t bookstore bookstore/
-docker run -d -p 5000:5000 --name bookstore bookstore
+docker build -t mall bookstore/
+docker run -d -p 5000:5000 --name mall bookstore
 ```
 
 ### 方式二：本地启动
@@ -37,26 +48,26 @@ python app.py
 ### 运行测试
 
 ```bash
-python -m pytest testcases -v --reruns 2
+python -m pytest testcases -v
 ```
 
-## 测试覆盖（53 条用例）
+## 测试覆盖（55+ 条用例）
 
 每个接口按四个维度设计：**正常流 / 异常流 / 边界值 / 权限校验**。
 
-| 接口 | 覆盖场景 |
+| 模块 | 覆盖场景 |
 |---|---|
 | 登录 | 正确/错误密码/用户不存在/空值/空请求体 |
-| 图书管理 | 增删改查、字段校验、非法价格、数据闭环 |
-| 购物车 | 加购累加、非法数量、图书不存在 |
-| 订单 | 下单总价校验、下单清空购物车、订单查询 |
+| 商品管理 | 增删改查、字段校验、非法价格/库存、数据闭环 |
+| 购物车 | 加购累加、非法数量、商品不存在、**超库存加购** |
+| 订单 | 总价校验、下单清空购物车、**下单扣库存**、订单查询 |
 
 特点：
 
 - **数据驱动**：测试数据存 yaml，数据与代码分离，改数据不改代码
 - **数据隔离**：修改/删除类用例只操作自己新建的数据，互不污染
 - **四层断言**：状态码 → 业务码 → 关键字段 → 错误信息
-- **失败重试**：偶发失败自动重跑，避免误报
+- **库存闭环**：加购/下单均校验库存，下单成功自动扣减库存
 
 ## 发现的真实 Bug
 
@@ -69,4 +80,4 @@ python -m pytest testcases -v --reruns 2
 ## CI/CD
 
 - **GitHub Actions**：代码 push 到 main 分支自动执行测试
-- **Jenkins**：本地 Jenkins 定时构建（每天凌晨 2 点），自动拉代码 → 启动待测系统 → 执行 53 条用例
+- **Jenkins**：本地 Jenkins 定时构建，自动拉代码 → 启动待测系统 → 执行全部用例

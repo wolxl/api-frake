@@ -1,12 +1,12 @@
-"""公共 fixture：登录一次，返回带 token 的 BookApi"""
+"""公共 fixture：登录一次，返回带 token 的 MallApi"""
 import pytest
-from api.book_api import BookApi
+from api.mall_api import MallApi
 
 
 @pytest.fixture
 def api():
-    """先登录拿 token，再用 token 创建 BookApi"""
-    book_api = BookApi()
-    resp = book_api.login("admin", "123456")
+    """先登录拿 token，再用 token 创建 MallApi"""
+    mall_api = MallApi()
+    resp = mall_api.login("admin", "123456")
     token = resp.json()["token"]
-    return BookApi(token)
+    return MallApi(token)
