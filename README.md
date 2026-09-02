@@ -13,7 +13,7 @@ Python · pytest · requests · yaml · Allure · Docker · GitHub Actions · Je
 ├── api/           # 接口层：每个接口一个方法（MallApi）
 ├── data/          # 测试数据（yaml 数据驱动）
 ├── testcases/     # 用例层：商品 / 购物车 / 订单 / 全流程
-├── bookstore/     # 待测系统（Flask 在线商城 API）
+├── mall_server/   # 待测系统（Flask 在线商城 API）
 └── .github/       # CI 工作流
 ```
 
@@ -33,14 +33,14 @@ Python · pytest · requests · yaml · Allure · Docker · GitHub Actions · Je
 ### 方式一：Docker 启动待测系统（推荐）
 
 ```bash
-docker build -t mall bookstore/
-docker run -d -p 5000:5000 --name mall bookstore
+docker build -t mall mall_server/
+docker run -d -p 5000:5000 --name mall mall_server
 ```
 
 ### 方式二：本地启动
 
 ```bash
-cd bookstore
+cd mall_server
 pip install -r requirements.txt
 python app.py
 ```

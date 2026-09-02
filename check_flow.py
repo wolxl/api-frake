@@ -9,18 +9,18 @@ print("1. 登录:", resp.status_code)
 token = resp.json()["token"]
 headers = {"Authorization": "Bearer " + token}
 
-# 2. 加购：2 本《软件测试的艺术》(id=1, 单价 59)
-resp = requests.post(f"{BASE}/api/cart", json={"book_id": 1, "quantity": 2}, headers=headers)
+# 2. 加购：无线蓝牙耳机(id=1, 单价 199) 2 件
+resp = requests.post(f"{BASE}/api/cart", json={"product_id": 1, "quantity": 2}, headers=headers)
 print("2. 加购:", resp.status_code, resp.json())
 
 # 3. 看购物车
 resp = requests.get(f"{BASE}/api/cart", headers=headers)
 print("3. 购物车:", resp.status_code, resp.json())
 
-# 4. 下单：2 本 id=1 → 总价应为 118
+# 4. 下单：id=1 耳机 2 件 → 总价应为 398
 resp = requests.post(
     f"{BASE}/api/orders",
-    json={"items": [{"book_id": 1, "quantity": 2}]},
+    json={"items": [{"product_id": 1, "quantity": 2}]},
     headers=headers,
 )
 print("4. 下单:", resp.status_code, resp.json())
