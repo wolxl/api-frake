@@ -28,21 +28,29 @@ Python · pytest · requests · yaml · Allure · Docker · GitHub Actions · Je
 | POST | /api/orders | 提交订单（校验并扣减库存） |
 | GET | /api/orders/{id} | 查询订单 |
 
-## 快速开始
+## 快速开始（Flask + MySQL）
 
-### 方式一：Docker 启动待测系统（推荐）
-
-```bash
-docker build -t mall mall_server/
-docker run -d -p 5000:5000 --name mall mall_server
-```
-
-### 方式二：本地启动
+待测系统数据存储在 MySQL（库名 `mall`），启动前先建库：
 
 ```bash
 cd mall_server
+mysql -u root -p < schema.sql    # 建库建表（5 张表）
+mysql -u root -p < seed.sql      # 种子数据：admin/test 账号、2 件商品
+cp config.example.py config.py   # 填入你的 MySQL 密码（config.py 不入库）
 pip install -r requirements.txt
-python app.py
+python app.py                    # 启动 http://127.0.0.1:5000
+```
+
+> Docker 启动方式已由 MySQL 版替代（内存数据无法持久化，且无法演示真实事务）。
+
+## 测试重置（跑测试前重置数据）
+
+测试会真实扣减库存、产生订单，重复跑测试前先重置数据库：
+
+```bash
+mysql -u root -p -e "DROP DATABASE IF EXISTS mall;"
+mysql -u root -p < schema.sql
+mysql -u root -p < seed.sql
 ```
 
 ### 运行测试

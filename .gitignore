@@ -4,3 +4,4 @@ allure-results/
 report.html
 .pytest_cache/
 .venv/
+mall_server/config.py
