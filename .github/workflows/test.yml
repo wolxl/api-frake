@@ -3,27 +3,85 @@ name: API Test
 on:
   push:
     branches: [main]
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: "123456"
+          MYSQL_DATABASE: mall
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -p123456 --silent"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=30
+
     steps:
-      - name: 拉取代码
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: 安装 Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: 安装依赖
-        run: pip install flask requests pytest
-
-      - name: 启动待测系统
+      - name: Install dependencies
         run: |
-          python bookstore/app.py > flask.log 2>&1 &
-          sleep 3
+          python -m pip install --upgrade pip
+          pip install -r mall_server/requirements.txt pytest cryptography
 
-      - name: 运行测试
-        run: pytest testcases -v
+      - name: Init database
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -uroot -p123456 < mall_server/schema.sql
+          mysql -h 127.0.0.1 -P 3306 -uroot -p123456 < mall_server/seed.sql
+          mysql -h 127.0.0.1 -P 3306 -uroot -p123456 -e "USE mall; SELECT COUNT(*) AS users FROM users; SELECT COUNT(*) AS products FROM products;"
+
+      - name: Generate config.py
+        run: |
+          cat > mall_server/config.py <<'EOF'
+          DB_CONFIG = {
+              "host": "127.0.0.1",
+              "port": 3306,
+              "user": "root",
+              "password": "123456",
+              "database": "mall",
+              "charset": "utf8mb4",
+          }
+          EOF
+
+      - name: Start mall server
+        run: |
+          cd mall_server
+          nohup python app.py > ../app.log 2>&1 &
+          cd ..
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:5000/api/products > /dev/null; then
+              echo "mall server is up"
+              break
+            fi
+            sleep 1
+          done
+          curl -s http://127.0.0.1:5000/api/products | head -c 300
+
+      - name: Run API tests
+        run: pytest testcases -v --junitxml=reports/junit.xml
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat app.log || true
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-report
+          path: reports/
+          if-no-files-found: ignore
