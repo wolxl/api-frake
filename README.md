@@ -1,5 +1,7 @@
 # 商城系统全流程接口自动化测试框架
 
+[![API Test](https://github.com/wolxl/api-frake/actions/workflows/test.yml/badge.svg)](https://github.com/wolxl/api-frake/actions/workflows/test.yml)
+
 基于 Python + pytest 的接口自动化测试框架，覆盖"登录 → 商品管理 → 购物车 → 下单（含库存校验）→ 订单查询"完整电商业务链路。
 
 ## 技术栈
