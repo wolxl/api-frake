@@ -1,4 +1,4 @@
-name: API Test
+﻿name: API Test
 
 on:
   push:
@@ -74,7 +74,7 @@ jobs:
       - name: Run API tests
         run: |
           set -o pipefail
-          pytest testcases -v --junitxml=reports/junit.xml 2>&1 | tee pytest.log
+          pytest testcases -v --junitxml=reports/junit.xml --alluredir=allure-results 2>&1 | tee pytest.log
 
       - name: Report failures
         if: failure()
@@ -96,5 +96,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: api-test-report
-          path: reports/
+          path: |
+            reports/
+            allure-results/
           if-no-files-found: ignore
+

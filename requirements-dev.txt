@@ -1,3 +1,4 @@
-pytest
+﻿pytest
 pyyaml
 cryptography
+allure-pytest
