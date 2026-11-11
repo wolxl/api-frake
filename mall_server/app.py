@@ -78,6 +78,14 @@ def cart_dict(user_id):
     return {str(r["product_id"]): r["quantity"] for r in rows}
 
 
+# ============ 健康检查（不需要 token）============
+# 用途：CI / 运维探活。不要拿业务接口当探针——业务接口要鉴权，401 会被误判成"服务没起来"。
+
+@app.get("/api/health")
+def health():
+    return jsonify({"status": "ok"})
+
+
 # ============ 接口 1：登录 ============
 
 @app.post("/api/login")
@@ -369,4 +377,14 @@ def get_order(order_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+
+    # 配置外部化：本地直接 python app.py 是 debug 模式；
+    # CI 里用环境变量关掉 debug（debug 会开 reloader，起两个进程，后台跑容易起不来或跑一半重启）
+    _debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(
+        host=os.environ.get("HOST", "127.0.0.1"),
+        port=int(os.environ.get("PORT", "5000")),
+        debug=_debug,
+        use_reloader=_debug,
+    )

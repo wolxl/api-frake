@@ -5,3 +5,6 @@ report.html
 .pytest_cache/
 .venv/
 mall_server/config.py
+
+app_ci.log
+app_ci.log.err
