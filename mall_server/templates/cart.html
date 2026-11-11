@@ -35,7 +35,13 @@
         </td>
         <td class="num">￥{{ r.price|yuan }}</td>
         <td class="num">
-          {{ r.quantity }}
+          <form action="{{ url_for('web.cart_update') }}" method="post" class="qty-form">
+            <input type="hidden" name="cart_id" value="{{ r.id }}">
+            <input type="number" name="quantity" value="{{ r.quantity }}"
+                   min="1" max="{{ r.stock }}" class="qty-input">
+            <button type="submit" class="link-btn">更新</button>
+          </form>
+          <div class="muted small">库存 {{ r.stock }} 件</div>
           {% if r.quantity > r.stock %}<span class="warn">库存不足</span>{% endif %}
         </td>
         <td class="num strong">￥{{ (r.price|float * r.quantity)|round(2) }}</td>

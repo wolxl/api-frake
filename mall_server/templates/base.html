@@ -18,14 +18,14 @@
       {% else %}
         <span>你好，请登录</span>
         <a href="{{ url_for('web.login') }}">登录</a>
-        <a href="{{ url_for('web.login') }}">免费注册</a>
+        <a href="{{ url_for('web.register') }}">免费注册</a>
       {% endif %}
     </div>
     <div class="tr">
       <a href="{{ url_for('web.orders') }}">我的订单</a>
       <a href="{{ url_for('web.cart') }}">购物车<span class="badge">{{ cart_badge }}</span></a>
-      <a href="#">收藏夹</a>
-      <a href="#">卖家中心</a>
+      <a href="{{ url_for('web.favorites') }}" class="{{ 'on' if active=='fav' }}">收藏夹</a>
+      <a href="{{ url_for('web.seller') }}" class="{{ 'on' if active=='seller' }}">卖家中心</a>
     </div>
   </div>
 </div>
@@ -78,8 +78,8 @@
 
 <footer class="footer">
   <div class="wrap">
-    <p>淘淘商城 · 用于功能测试与接口自动化教学的被测系统</p>
-    <p class="muted">Flask + MySQL · 服务端渲染 · {{ cart_badge }} 件商品在购物车</p>
+    <p>© 2026 淘淘商城　客服热线 400-000-0000</p>
+    <p class="muted">关于我们　|　帮助中心　|　售后服务　|　联系客服</p>
   </div>
 </footer>
 

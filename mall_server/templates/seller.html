@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}卖家中心 - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="crumb"><a href="{{ url_for('web.index') }}">首页</a> › 卖家中心</div>
+
+  <div class="sec-head">
+    <h3>卖家中心</h3>
+    <span class="muted">共 {{ rows|length }} 件商品 · 只读视图</span>
+  </div>
+
+  <p class="hint">这个系统没有做角色与权限模型，任何登录用户都能看到这张表，但不能改库存。</p>
+
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th class="num">ID</th><th>商品名称</th>
+        <th class="num">售价</th><th class="num">库存</th>
+        <th class="num">状态</th><th class="num">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in rows %}
+      <tr>
+        <td class="num">{{ p.id }}</td>
+        <td>
+          <div class="tbl-prod">
+            <span class="thumb">{{ p.name|emoji }}</span>
+            <a href="{{ url_for('web.product_detail', pid=p.id) }}">{{ p.name }}</a>
+          </div>
+        </td>
+        <td class="num">￥{{ p.price|yuan }}</td>
+        <td class="num">{{ p.stock }}</td>
+        <td class="num">
+          {% if p.stock == 0 %}<span class="tag cancelled">已售罄</span>
+          {% elif p.stock < 10 %}<span class="tag created">库存紧张</span>
+          {% else %}<span class="tag paid">在售</span>{% endif %}
+        </td>
+        <td class="num"><button type="button" class="link-btn" disabled>编辑</button></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

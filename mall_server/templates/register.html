@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}注册 - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="login-box">
+    <h3>免费注册</h3>
+    <form action="{{ url_for('web.register') }}" method="post">
+      <label>用户名</label>
+      <input type="text" name="username" placeholder="3-20 位，字母、数字或下划线" autocomplete="off">
+      <label>密码</label>
+      <input type="password" name="password" placeholder="6-20 位，必须包含字母和数字">
+      <label>确认密码</label>
+      <input type="password" name="confirm" placeholder="再输入一次密码">
+      <button type="submit" class="btn-buy big">注 册</button>
+    </form>
+    <p class="login-tip muted">
+      已有账号？<a href="{{ url_for('web.login') }}">直接登录</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

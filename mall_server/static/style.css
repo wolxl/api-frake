@@ -309,6 +309,47 @@ a:hover { color: var(--brand); }
 }
 .footer p { margin: 4px 0; }
 
+/* ---------- 分页 ---------- */
+.pager {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; padding: 22px 0 6px; font-size: 14px;
+}
+.pager a, .pager .off {
+  padding: 7px 16px; border: 1px solid var(--line);
+  border-radius: 4px; background: #fff; color: #333;
+}
+.pager a:hover { border-color: var(--brand); color: var(--brand); }
+.pager .off { color: #bbb; background: #fafafa; }
+.cur-page { color: var(--muted); }
+
+/* ---------- 数量修改 ---------- */
+.qty-form { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+.qty-input {
+  width: 64px; height: 30px; padding: 0 6px; text-align: center;
+  border: 1px solid var(--line); border-radius: 4px; font-size: 13px;
+}
+.qty-input:focus { outline: none; border-color: var(--brand); }
+
+/* ---------- 订单状态标签 ---------- */
+.tag {
+  display: inline-block; padding: 2px 10px; border-radius: 10px;
+  font-size: 12px; line-height: 18px; background: #f2f2f2; color: #666;
+}
+.tag.created { background: #fff4e6; color: #e67e22; }
+.tag.paid    { background: #e8f7ee; color: #1a9c62; }
+.tag.cancelled { background: #f2f2f2; color: #999; }
+.tag.refunded  { background: #eef2ff; color: #4b6bd6; }
+
+.order-head { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.order-head .tag { margin-left: auto; }
+.small { font-size: 12px; }
+.hint {
+  background: #fffbe6; border: 1px solid #ffe58f; color: #8a6d3b;
+  padding: 10px 14px; border-radius: 4px; font-size: 13px; margin: 0 0 14px;
+}
+.tbl .num { text-align: right; }
+.tbl th.num { text-align: right; }
+
 /* ---------- 窄屏 ---------- */
 @media (max-width: 1000px) {
   .grid { grid-template-columns: repeat(2, 1fr); }

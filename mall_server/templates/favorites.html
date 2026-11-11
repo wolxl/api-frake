@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}我的收藏 - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="crumb"><a href="{{ url_for('web.index') }}">首页</a> › 我的收藏</div>
+
+  <div class="sec-head">
+    <h3>我的收藏</h3>
+    <span class="muted">{{ rows|length }} 件商品</span>
+  </div>
+
+  {% if rows|length == 0 %}
+    <div class="empty-box">
+      <p class="empty-ico">☆</p>
+      <p>还没有收藏任何商品</p>
+      <p class="muted"><a href="{{ url_for('web.index') }}">去逛逛</a></p>
+    </div>
+  {% else %}
+  <div class="grid">
+    {% for p in rows %}
+    <div class="card">
+      <a class="card-img" href="{{ url_for('web.product_detail', pid=p.product_id) }}">
+        <span class="emoji">{{ p.name|emoji }}</span>
+      </a>
+      <div class="card-body">
+        <a class="card-title" href="{{ url_for('web.product_detail', pid=p.product_id) }}">{{ p.name }}</a>
+        <div class="card-price"><span class="cur">￥</span>{{ p.price|yuan }}</div>
+        <div class="card-meta">
+          <span class="{{ 'out' if p.stock == 0 else '' }}">
+            {% if p.stock == 0 %}已售罄{% else %}库存 {{ p.stock }} 件{% endif %}
+          </span>
+        </div>
+        <form action="{{ url_for('web.cart_add') }}" method="post" class="card-form">
+          <input type="hidden" name="product_id" value="{{ p.product_id }}">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="next" value="{{ request.full_path }}">
+          <button type="submit" class="btn-buy" {{ 'disabled' if p.stock == 0 }}>加入购物车</button>
+        </form>
+        <form action="{{ url_for('web.favorite_toggle') }}" method="post" class="card-form">
+          <input type="hidden" name="product_id" value="{{ p.product_id }}">
+          <input type="hidden" name="next" value="{{ request.full_path }}">
+          <button type="submit" class="link-btn">取消收藏</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

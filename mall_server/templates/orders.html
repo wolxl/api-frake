@@ -7,35 +7,64 @@
 
   <div class="sec-head">
     <h3>我的订单</h3>
-    <span class="muted">共 {{ orders|length }} 笔</span>
+    <span class="muted">共 {{ orders|length }} 个订单</span>
   </div>
 
   {% if orders|length == 0 %}
     <div class="empty-box">
       <p class="empty-ico">📦</p>
       <p>还没有订单</p>
-      <p class="muted"><a href="{{ url_for('web.index') }}">去下单试试</a></p>
+      <p class="muted"><a href="{{ url_for('web.index') }}">去逛逛</a></p>
     </div>
   {% else %}
     {% for o in orders %}
     <div class="order">
       <div class="order-head">
-        <span class="order-no">订单号：{{ o.id }}</span>
+        <span>订单号 <b>{{ o.id }}</b></span>
         <span class="muted">{{ o.created_at }}</span>
-        <span class="order-status">{{ o.status }}</span>
+        <span class="strong">￥{{ o.total_price|yuan }}</span>
+        <span class="tag {{ o.status }}">{{ o.status|status_cn }}</span>
       </div>
-      <div class="order-body">
-        {% for d in detail[o.id] %}
-        <div class="order-line">
-          <span class="thumb">{{ d.name|emoji }}</span>
-          <span class="order-name">{{ d.name }}</span>
-          <span class="muted">￥{{ d.price|yuan }} × {{ d.quantity }}</span>
-          <span class="strong">￥{{ (d.price|float * d.quantity)|round(2) }}</span>
-        </div>
-        {% endfor %}
-      </div>
+
+      <table class="tbl">
+        <thead>
+          <tr><th>商品</th><th class="num">单价</th><th class="num">数量</th><th class="num">小计</th></tr>
+        </thead>
+        <tbody>
+          {% for it in detail[o.id] %}
+          <tr>
+            <td>
+              <div class="tbl-prod">
+                <span class="thumb">{{ it.name|emoji }}</span>
+                <a href="{{ url_for('web.product_detail', pid=it.product_id) }}">{{ it.name }}</a>
+              </div>
+            </td>
+            <td class="num">￥{{ it.price|yuan }}</td>
+            <td class="num">{{ it.quantity }}</td>
+            <td class="num">￥{{ (it.price|float * it.quantity)|round(2) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
       <div class="order-foot">
-        实付：<span class="total">￥{{ o.total_price|yuan }}</span>
+        {% if o.status == 'created' %}
+          <form action="{{ url_for('web.order_pay', oid=o.id) }}" method="post">
+            <button type="submit" class="btn-buy">立即支付</button>
+          </form>
+          <form action="{{ url_for('web.order_cancel', oid=o.id) }}" method="post">
+            <button type="submit" class="link-btn">取消订单</button>
+          </form>
+        {% elif o.status == 'paid' %}
+          <span class="muted">支付时间：{{ o.paid_at }}</span>
+          <form action="{{ url_for('web.order_refund', oid=o.id) }}" method="post">
+            <button type="submit" class="link-btn">申请退款</button>
+          </form>
+        {% elif o.status == 'cancelled' %}
+          <span class="muted">订单已取消，库存已退回</span>
+        {% elif o.status == 'refunded' %}
+          <span class="muted">已退款，库存已退回</span>
+        {% endif %}
       </div>
     </div>
     {% endfor %}

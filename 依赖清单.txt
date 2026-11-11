@@ -1,0 +1,90 @@
+api-frake 依赖安装清单
+================================================================
+生成时间：2026-11-10 19:12
+项目路径：C:\Users\86189\Documents\deepseek-harness\default-workspace\api-frake
+Python  ：3.14.3（C:\Users\86189\AppData\Local\Programs\Python\Python314\python.exe）
+系统    ：Windows（amd64）
+
+================================================================
+一、直接依赖（项目里声明的）
+================================================================
+
+【运行依赖】mall_server\requirements.txt
+    flask
+    pymysql
+    requests
+
+【测试依赖】requirements-dev.txt
+    pytest
+    pyyaml
+    cryptography
+    allure-pytest
+
+================================================================
+二、已安装的实际版本（本次安装后核对）
+================================================================
+
+顶层依赖（项目声明的 7 个）
+    Flask             3.1.3
+    PyMySQL           1.1.2
+    requests          2.34.2
+    pytest            9.1.1
+    PyYAML            6.0.3
+    cryptography      50.0.2      ← 本次新装
+    allure-pytest     2.16.2      ← 本次新装
+
+传递依赖（上面这些包自己带进来的，不用手动装）
+    allure-python-commons  2.16.2  ← 本次新装
+    Werkzeug          3.1.8
+    Jinja2            3.1.6
+    MarkupSafe        3.0.3
+    itsdangerous      2.2.0
+    click             8.4.2
+    blinker           1.9.0
+    urllib3           2.7.0
+    certifi           2026.6.17
+    charset-normalizer 3.4.9
+    idna              3.18
+    iniconfig         2.3.0
+    pluggy            1.6.0
+    packaging         26.3
+    Pygments          2.20.0
+    colorama          0.4.6
+    cffi              2.1.0
+    pycparser         3.0
+    attrs             26.1.0
+
+================================================================
+三、本次实际执行的安装命令
+================================================================
+
+cd C:\Users\86189\Documents\deepseek-harness\default-workspace\api-frake
+python -m pip install -r mall_server\requirements.txt -r requirements-dev.txt
+
+结果：Successfully installed allure-pytest-2.16.2 allure-python-commons-2.16.2 cryptography-50.0.2
+其余 5 个（flask / pymysql / requests / pytest / pyyaml）本来就已满足，未重新下载。
+
+在新电脑上重建同样的环境，敲这一行就够：
+    python -m pip install flask pymysql requests pytest pyyaml cryptography allure-pytest
+
+要完全锁定版本（推荐，避免以后 pip 装到新版把测试搞挂）：
+    python -m pip install flask==3.1.3 pymysql==1.1.2 requests==2.34.2 pytest==9.1.1 pyyaml==6.0.3 cryptography==50.0.2 allure-pytest==2.16.2
+
+================================================================
+四、安装后自检（全部通过）
+================================================================
+
+python -c "import flask, pymysql, requests, pytest, yaml, cryptography, allure; print('all imports OK')"
+→ all imports OK
+
+================================================================
+五、两个要注意的地方
+================================================================
+
+1. allure-pytest 只是 pytest 的插件，只负责生成原始结果文件（allure-results）。
+   要看 HTML 报告，还得单独装 allure 命令行工具（它是 Java 写的，不在 pip 里）。
+   GitHub Actions 的 .github/workflows/test.yml 里如果没装它，
+   「生成报告」那一步一定是红的——这也是当前 Actions 跑不通的原因之一。
+
+2. 版本号里能看到 Python 3.14 比较新，个别老包（比如某些老版本 pymysql 分支）
+   在 3.14 上可能装得上但跑不通。当前这套已验证 import 正常、pytest 能收集用例。

@@ -8,12 +8,12 @@
     <ul>
       <li><a href="{{ url_for('web.search', q='耳机') }}">手机数码 <i>›</i></a></li>
       <li><a href="{{ url_for('web.search', q='键盘') }}">电脑办公 <i>›</i></a></li>
-      <li><a href="#">家用电器 <i>›</i></a></li>
-      <li><a href="#">服饰鞋包 <i>›</i></a></li>
-      <li><a href="#">美妆个护 <i>›</i></a></li>
-      <li><a href="#">母婴玩具 <i>›</i></a></li>
-      <li><a href="#">食品生鲜 <i>›</i></a></li>
-      <li><a href="#">运动户外 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='显示器') }}">家用电器 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='手表') }}">服饰鞋包 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='充电') }}">美妆个护 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='鼠标') }}">母婴玩具 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='音箱') }}">食品生鲜 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='平板') }}">运动户外 <i>›</i></a></li>
     </ul>
   </aside>
 
@@ -33,7 +33,7 @@
 <div class="wrap">
   <div class="sec-head">
     <h3>为你推荐</h3>
-    <span class="muted">共 {{ products|length }} 件商品</span>
+    <span class="muted">共 {{ total }} 件商品 · 第 {{ page }}/{{ pages }} 页</span>
   </div>
 
   <div class="grid">
@@ -55,8 +55,15 @@
         <form action="{{ url_for('web.cart_add') }}" method="post" class="card-form">
           <input type="hidden" name="product_id" value="{{ p.id }}">
           <input type="hidden" name="quantity" value="1">
-          <input type="hidden" name="next" value="/">
+          <input type="hidden" name="next" value="{{ request.full_path }}">
           <button type="submit" class="btn-buy" {{ 'disabled' if p.stock == 0 }}>加入购物车</button>
+        </form>
+        <form action="{{ url_for('web.favorite_toggle') }}" method="post" class="card-form">
+          <input type="hidden" name="product_id" value="{{ p.id }}">
+          <input type="hidden" name="next" value="{{ request.full_path }}">
+          <button type="submit" class="link-btn">
+            {% if p.id in favs %}★ 已收藏{% else %}☆ 收藏{% endif %}
+          </button>
         </form>
       </div>
     </div>
@@ -64,5 +71,13 @@
     <p class="empty">还没有商品，先跑一下 seed.sql 吧。</p>
     {% endfor %}
   </div>
+
+  {% if pages > 1 %}
+  <div class="pager">
+    {% if page > 1 %}<a href="{{ page_url(page - 1) }}">上一页</a>{% else %}<span class="off">上一页</span>{% endif %}
+    <span class="cur-page">第 {{ page }} / {{ pages }} 页</span>
+    {% if page < pages %}<a href="{{ page_url(page + 1) }}">下一页</a>{% else %}<span class="off">下一页</span>{% endif %}
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
