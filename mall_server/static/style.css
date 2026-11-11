@@ -1,0 +1,322 @@
+/* ===========================================================
+   淘淘商城 · 前端样式（仿淘宝/京东的信息层级与配色）
+   主色 #ff5000（淘宝橙），辅助 #e1251b（京东红），底 #f5f5f5
+   =========================================================== */
+
+:root {
+  --brand: #ff5000;
+  --brand-d: #e63e00;
+  --red: #e1251b;
+  --bg: #f5f5f5;
+  --line: #eee;
+  --text: #333;
+  --muted: #999;
+  --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.6 -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--brand); }
+.wrap { width: 1200px; max-width: 94%; margin: 0 auto; }
+.muted { color: var(--muted); }
+.strong { font-weight: 700; }
+.out { color: var(--muted); }
+
+/* ---------- 顶部工具栏 ---------- */
+.topbar {
+  background: #f7f7f7;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+  color: #666;
+}
+.topbar-in { display: flex; justify-content: space-between; height: 34px; align-items: center; }
+.topbar-in a { margin-left: 14px; color: #666; }
+.topbar-in a:hover { color: var(--brand); }
+.topbar-in b { color: var(--brand); }
+.badge {
+  display: inline-block; min-width: 16px; height: 16px; line-height: 16px;
+  padding: 0 4px; margin-left: 4px; border-radius: 8px;
+  background: var(--brand); color: #fff; font-size: 11px; text-align: center;
+}
+
+/* ---------- 主头部 ---------- */
+.header { background: #fff; }
+.header-in {
+  display: flex; align-items: center; gap: 40px; height: 100px;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+  width: 46px; height: 46px; border-radius: 12px;
+  background: linear-gradient(135deg, #ff7a2f, var(--brand));
+  color: #fff; font-size: 24px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 10px rgba(255, 80, 0, .28);
+}
+.logo-text { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+.logo-text em {
+  display: block; font-size: 11px; font-style: normal;
+  letter-spacing: 4px; color: var(--muted); font-weight: 400;
+}
+
+.search { flex: 1; display: flex; max-width: 560px; }
+.search input {
+  flex: 1; height: 42px; padding: 0 14px;
+  border: 2px solid var(--brand); border-right: 0;
+  border-radius: var(--radius) 0 0 var(--radius);
+  font-size: 14px; outline: none;
+}
+.search button {
+  width: 96px; height: 42px; border: 0; cursor: pointer;
+  background: var(--brand); color: #fff; font-size: 16px; letter-spacing: 2px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.search button:hover { background: var(--brand-d); }
+
+.cart-btn {
+  height: 42px; padding: 0 22px; display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--brand); color: var(--brand);
+  border-radius: var(--radius); font-size: 14px; background: #fff8f4;
+}
+.cart-btn b { color: var(--brand); }
+
+/* ---------- 主导航 ---------- */
+.nav { background: var(--brand); }
+.nav-in { display: flex; align-items: center; height: 42px; }
+.nav-cat {
+  width: 200px; height: 42px; line-height: 42px; text-align: center;
+  background: var(--brand-d); color: #fff; font-size: 15px; font-weight: 700;
+}
+.nav a {
+  color: #fff; padding: 0 18px; line-height: 42px; font-size: 15px;
+  opacity: .92;
+}
+.nav a:hover { opacity: 1; background: rgba(0, 0, 0, .12); }
+.nav a.on { background: rgba(0, 0, 0, .16); font-weight: 700; }
+
+/* ---------- flash ---------- */
+.flash-wrap { margin-top: 12px; }
+.flash {
+  padding: 10px 14px; border-radius: var(--radius); margin-bottom: 8px;
+  font-size: 13px; border-left: 4px solid;
+}
+.flash.ok { background: #f0f9eb; border-color: #67c23a; color: #3f7a20; }
+.flash.error { background: #fef0f0; border-color: var(--red); color: #a12f2a; }
+
+/* ---------- 首页 ---------- */
+.main { display: flex; gap: 14px; margin-top: 14px; }
+
+.cats { width: 200px; background: #fff; border-radius: var(--radius); padding: 8px 0; }
+.cats ul { list-style: none; margin: 0; padding: 0; }
+.cats li a {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 16px; font-size: 14px; color: #444;
+}
+.cats li a i { font-style: normal; color: #ccc; }
+.cats li a:hover { background: #fff4ef; color: var(--brand); }
+
+.banner {
+  flex: 1; border-radius: var(--radius); overflow: hidden;
+  background: linear-gradient(120deg, #ff6a00 0%, #ff2d55 55%, #c2185b 100%);
+  color: #fff; display: flex; align-items: center; justify-content: space-between;
+  padding: 40px 56px; position: relative; min-height: 300px;
+}
+.banner-tag {
+  display: inline-block; margin: 0 0 14px; padding: 3px 12px;
+  background: rgba(255, 255, 255, .22); border-radius: 20px; font-size: 13px;
+}
+.banner h2 { margin: 0 0 10px; font-size: 38px; letter-spacing: 1px; }
+.banner-sub { margin: 0 0 24px; font-size: 15px; opacity: .92; }
+.banner-btn {
+  display: inline-block; padding: 11px 32px; background: #fff; color: var(--brand);
+  border-radius: 24px; font-weight: 700; font-size: 15px;
+}
+.banner-btn:hover { background: #fff3ec; color: var(--brand-d); }
+.banner-art { font-size: 130px; opacity: .9; }
+
+/* ---------- 区块标题 ---------- */
+.sec-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin: 26px 0 14px;
+}
+.sec-head h3 {
+  margin: 0; font-size: 20px; position: relative; padding-left: 12px;
+}
+.sec-head h3::before {
+  content: ""; position: absolute; left: 0; top: 4px;
+  width: 4px; height: 18px; border-radius: 2px; background: var(--brand);
+}
+
+/* ---------- 商品网格 ---------- */
+.grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  padding-bottom: 20px;
+}
+.card {
+  background: #fff; border-radius: var(--radius); overflow: hidden;
+  transition: box-shadow .18s, transform .18s;
+}
+.card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, .1); transform: translateY(-2px); }
+.card-img {
+  display: flex; align-items: center; justify-content: center;
+  height: 200px; background: linear-gradient(135deg, #fff6f1, #ffe6da);
+}
+.card-img .emoji { font-size: 76px; }
+.card-body { padding: 12px 14px 16px; }
+.card-title {
+  display: block; height: 44px; overflow: hidden;
+  font-size: 14px; line-height: 22px; color: #333;
+}
+.card-price { color: var(--red); font-size: 20px; font-weight: 700; margin-top: 6px; }
+.card-price .cur { font-size: 13px; margin-right: 2px; }
+.card-meta { font-size: 12px; color: var(--muted); margin: 4px 0 10px; }
+.card-form { margin: 0; }
+
+.btn-buy {
+  width: 100%; height: 34px; border: 0; cursor: pointer;
+  background: var(--brand); color: #fff; border-radius: 17px;
+  font-size: 14px; letter-spacing: 1px;
+}
+.btn-buy:hover { background: var(--brand-d); }
+.btn-buy:disabled { background: #ccc; cursor: not-allowed; }
+.btn-buy.big { width: auto; padding: 0 34px; height: 44px; border-radius: 22px; font-size: 16px; }
+
+/* ---------- 面包屑 ---------- */
+.crumb { font-size: 13px; color: var(--muted); padding: 16px 0 4px; }
+.crumb a { color: var(--muted); }
+.crumb a:hover { color: var(--brand); }
+
+/* ---------- 商品详情 ---------- */
+.detail { display: flex; gap: 36px; background: #fff; padding: 26px; border-radius: var(--radius); margin-bottom: 20px; }
+.detail-img {
+  width: 420px; height: 420px; flex: none; border-radius: var(--radius);
+  background: linear-gradient(135deg, #fff6f1, #ffe0d2);
+  display: flex; align-items: center; justify-content: center;
+}
+.detail-img .emoji { font-size: 160px; }
+.detail-info { flex: 1; }
+.detail-info h1 { margin: 0 0 18px; font-size: 24px; line-height: 1.4; }
+
+.price-box {
+  background: #fff7f3; border-radius: var(--radius); padding: 16px 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.price-box .lbl { color: var(--muted); font-size: 13px; }
+.price-box .big { color: var(--red); font-size: 34px; font-weight: 700; }
+.price-box .cur { font-size: 18px; }
+
+.attrs { display: grid; grid-template-columns: 60px 1fr; gap: 10px 0; margin: 20px 0; font-size: 14px; }
+.attrs dt { color: var(--muted); }
+.attrs dd { margin: 0; }
+
+.buy-form { display: flex; align-items: center; gap: 18px; margin-top: 12px; }
+.qty { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+.qty input {
+  width: 78px; height: 36px; padding: 0 10px; font-size: 14px;
+  border: 1px solid #ddd; border-radius: 6px; outline: none;
+}
+.qty input:focus { border-color: var(--brand); }
+
+/* ---------- 表格（购物车） ---------- */
+.tbl { width: 100%; background: #fff; border-radius: var(--radius); border-collapse: collapse; overflow: hidden; }
+.tbl th, .tbl td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; }
+.tbl th { background: #fafafa; font-weight: 500; color: #666; font-size: 13px; }
+.tbl .num { text-align: right; }
+.tbl-prod { display: flex; align-items: center; gap: 12px; }
+.thumb {
+  width: 46px; height: 46px; border-radius: 6px; flex: none;
+  background: linear-gradient(135deg, #fff6f1, #ffe0d2);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 24px;
+}
+.warn { color: var(--red); font-size: 12px; margin-left: 6px; }
+.link-btn {
+  border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 13px; padding: 0;
+}
+.link-btn:hover { color: var(--brand); }
+
+.settle {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #fff; border-radius: var(--radius); padding: 18px 24px; margin: 16px 0 30px;
+}
+.settle-left a { color: var(--muted); font-size: 13px; }
+.settle-right { display: flex; align-items: center; gap: 16px; }
+.total { color: var(--red); font-size: 26px; font-weight: 700; }
+.settle-right form { margin: 0; }
+
+/* ---------- 订单 ---------- */
+.order { background: #fff; border-radius: var(--radius); margin-bottom: 14px; overflow: hidden; }
+.order-head {
+  display: flex; align-items: center; gap: 20px;
+  padding: 12px 20px; background: #fafafa; border-bottom: 1px solid var(--line); font-size: 13px;
+}
+.order-no { font-weight: 600; }
+.order-status {
+  margin-left: auto; color: var(--brand); background: #fff2ec;
+  padding: 2px 10px; border-radius: 12px; font-size: 12px;
+}
+.order-body { padding: 8px 20px; }
+.order-line {
+  display: flex; align-items: center; gap: 14px; padding: 10px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.order-line:last-child { border-bottom: 0; }
+.order-name { flex: 1; }
+.order-foot { text-align: right; padding: 12px 20px 16px; font-size: 13px; color: #666; }
+.order-foot .total { margin-left: 4px; }
+
+/* ---------- 登录 ---------- */
+.login-wrap { padding: 40px 0 60px; display: flex; justify-content: center; }
+.login-box {
+  width: 400px; background: #fff; border-radius: 12px; padding: 32px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+}
+.login-head { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.login-head h2 { margin: 0; font-size: 22px; }
+.field { display: block; margin-bottom: 16px; }
+.field span { display: block; font-size: 13px; color: #666; margin-bottom: 6px; }
+.field input {
+  width: 100%; height: 44px; padding: 0 14px; font-size: 14px;
+  border: 1px solid #ddd; border-radius: 6px; outline: none;
+}
+.field input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(255, 80, 0, .1); }
+.btn-login {
+  width: 100%; height: 46px; border: 0; cursor: pointer; margin-top: 6px;
+  background: var(--brand); color: #fff; font-size: 17px; letter-spacing: 3px;
+  border-radius: 6px;
+}
+.btn-login:hover { background: var(--brand-d); }
+.login-tip { font-size: 12px; text-align: center; margin-top: 16px; }
+
+/* ---------- 空状态 ---------- */
+.empty { color: var(--muted); padding: 40px; text-align: center; }
+.empty-box {
+  background: #fff; border-radius: var(--radius); padding: 60px 20px;
+  text-align: center; color: #666; margin-bottom: 30px;
+}
+.empty-ico { font-size: 56px; margin: 0 0 10px; }
+
+/* ---------- 页脚 ---------- */
+.footer {
+  border-top: 1px solid var(--line); background: #fff;
+  padding: 26px 0; margin-top: 20px; text-align: center; font-size: 13px; color: #666;
+}
+.footer p { margin: 4px 0; }
+
+/* ---------- 窄屏 ---------- */
+@media (max-width: 1000px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+  .detail { flex-direction: column; }
+  .detail-img { width: 100%; height: 300px; }
+  .main { flex-direction: column; }
+  .cats { width: 100%; }
+  .banner { min-height: 200px; padding: 28px; }
+  .banner h2 { font-size: 26px; }
+  .banner-art { display: none; }
+}

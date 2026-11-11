@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}登录 - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-head">
+        <span class="logo-mark">淘</span>
+        <h2>欢迎登录</h2>
+      </div>
+
+      <form method="post" action="{{ url_for('web.login', next=request.args.get('next')) }}">
+        <label class="field">
+          <span>用户名</span>
+          <input type="text" name="username" placeholder="请输入用户名" autofocus>
+        </label>
+        <label class="field">
+          <span>密 码</span>
+          <input type="password" name="password" placeholder="请输入密码">
+        </label>
+        <button type="submit" class="btn-login">登 录</button>
+      </form>
+
+      <p class="login-tip muted">测试账号：admin / 123456 · test / 123456</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

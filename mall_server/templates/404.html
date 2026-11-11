@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}页面不存在 - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="empty-box" style="margin-top:30px">
+    <p class="empty-ico">🧐</p>
+    <p style="font-size:18px">{{ msg or '页面不存在' }}</p>
+    <p class="muted"><a href="{{ url_for('web.index') }}">回首页看看</a></p>
+  </div>
+</div>
+{% endblock %}

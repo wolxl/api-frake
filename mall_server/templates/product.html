@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ p.name }} - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="crumb">
+    <a href="{{ url_for('web.index') }}">首页</a> › {{ p.name }}
+  </div>
+
+  <div class="detail">
+    <div class="detail-img"><span class="emoji">{{ p.name|emoji }}</span></div>
+
+    <div class="detail-info">
+      <h1>{{ p.name }}</h1>
+      <div class="price-box">
+        <span class="lbl">促&nbsp;销&nbsp;价</span>
+        <span class="big"><span class="cur">￥</span>{{ p.price|yuan }}</span>
+      </div>
+
+      <dl class="attrs">
+        <dt>库存</dt>
+        <dd>{% if p.stock == 0 %}<span class="out">已售罄</span>{% else %}{{ p.stock }} 件{% endif %}</dd>
+        <dt>服务</dt>
+        <dd>7 天无理由退货 · 假一赔十</dd>
+        <dt>配送</dt>
+        <dd>内蒙古乌海市 · 顺丰包邮</dd>
+      </dl>
+
+      <form action="{{ url_for('web.cart_add') }}" method="post" class="buy-form">
+        <input type="hidden" name="product_id" value="{{ p.id }}">
+        <input type="hidden" name="next" value="/product/{{ p.id }}">
+        <label class="qty">
+          数量
+          <input type="number" name="quantity" value="1" min="1" max="{{ p.stock }}"
+                 {{ 'disabled' if p.stock == 0 }}>
+        </label>
+        <button type="submit" class="btn-buy big" {{ 'disabled' if p.stock == 0 }}>
+          {% if p.stock == 0 %}已售罄{% else %}加入购物车{% endif %}
+        </button>
+      </form>
+
+      {% if p.stock == 0 %}
+        <p class="muted">该商品暂时无货，可以先看看<a href="{{ url_for('web.index') }}">其他商品</a>。</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

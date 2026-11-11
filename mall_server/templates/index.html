@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}淘淘商城 - 首页{% endblock %}
+
+{% block body %}
+<div class="wrap main">
+  <!-- 左侧分类 -->
+  <aside class="cats">
+    <ul>
+      <li><a href="{{ url_for('web.search', q='耳机') }}">手机数码 <i>›</i></a></li>
+      <li><a href="{{ url_for('web.search', q='键盘') }}">电脑办公 <i>›</i></a></li>
+      <li><a href="#">家用电器 <i>›</i></a></li>
+      <li><a href="#">服饰鞋包 <i>›</i></a></li>
+      <li><a href="#">美妆个护 <i>›</i></a></li>
+      <li><a href="#">母婴玩具 <i>›</i></a></li>
+      <li><a href="#">食品生鲜 <i>›</i></a></li>
+      <li><a href="#">运动户外 <i>›</i></a></li>
+    </ul>
+  </aside>
+
+  <!-- 右侧 banner -->
+  <section class="banner">
+    <div class="banner-text">
+      <p class="banner-tag">限时秒杀</p>
+      <h2>数码好物 低至 5 折</h2>
+      <p class="banner-sub">无线蓝牙耳机 ￥199 起 · 机械键盘 ￥399 起</p>
+      <a class="banner-btn" href="{{ url_for('web.search', q='') }}">立即抢购</a>
+    </div>
+    <div class="banner-art">🛍️</div>
+  </section>
+</div>
+
+<!-- 商品列表 -->
+<div class="wrap">
+  <div class="sec-head">
+    <h3>为你推荐</h3>
+    <span class="muted">共 {{ products|length }} 件商品</span>
+  </div>
+
+  <div class="grid">
+    {% for p in products %}
+    <div class="card">
+      <a class="card-img" href="{{ url_for('web.product_detail', pid=p.id) }}">
+        <span class="emoji">{{ p.name|emoji }}</span>
+      </a>
+      <div class="card-body">
+        <a class="card-title" href="{{ url_for('web.product_detail', pid=p.id) }}">{{ p.name }}</a>
+        <div class="card-price">
+          <span class="cur">￥</span>{{ p.price|yuan }}
+        </div>
+        <div class="card-meta">
+          <span class="{{ 'out' if p.stock == 0 else '' }}">
+            {% if p.stock == 0 %}已售罄{% else %}库存 {{ p.stock }} 件{% endif %}
+          </span>
+        </div>
+        <form action="{{ url_for('web.cart_add') }}" method="post" class="card-form">
+          <input type="hidden" name="product_id" value="{{ p.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="next" value="/">
+          <button type="submit" class="btn-buy" {{ 'disabled' if p.stock == 0 }}>加入购物车</button>
+        </form>
+      </div>
+    </div>
+    {% else %}
+    <p class="empty">还没有商品，先跑一下 seed.sql 吧。</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}淘淘商城{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('web.static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- 顶部工具栏 -->
+<div class="topbar">
+  <div class="wrap topbar-in">
+    <div class="tl">
+      {% if user %}
+        <span>你好，<b>{{ user.username }}</b></span>
+        <a href="{{ url_for('web.logout') }}">退出</a>
+      {% else %}
+        <span>你好，请登录</span>
+        <a href="{{ url_for('web.login') }}">登录</a>
+        <a href="{{ url_for('web.login') }}">免费注册</a>
+      {% endif %}
+    </div>
+    <div class="tr">
+      <a href="{{ url_for('web.orders') }}">我的订单</a>
+      <a href="{{ url_for('web.cart') }}">购物车<span class="badge">{{ cart_badge }}</span></a>
+      <a href="#">收藏夹</a>
+      <a href="#">卖家中心</a>
+    </div>
+  </div>
+</div>
+
+<!-- 主头部：logo + 搜索 -->
+<header class="header">
+  <div class="wrap header-in">
+    <a class="logo" href="{{ url_for('web.index') }}">
+      <span class="logo-mark">淘</span>
+      <span class="logo-text">淘淘商城<em>MALL</em></span>
+    </a>
+
+    <form class="search" action="{{ url_for('web.search') }}" method="get">
+      <input type="text" name="q" value="{{ q|default('') }}"
+             placeholder="搜索商品，例如：耳机" autocomplete="off">
+      <button type="submit">搜 索</button>
+    </form>
+
+    <a class="cart-btn" href="{{ url_for('web.cart') }}">
+      购物车 <b>{{ cart_badge }}</b>
+    </a>
+  </div>
+</header>
+
+<!-- 主导航 -->
+<nav class="nav">
+  <div class="wrap nav-in">
+    <span class="nav-cat">全部商品分类</span>
+    <a href="{{ url_for('web.index') }}" class="{{ 'on' if active=='index' }}">首页</a>
+    <a href="{{ url_for('web.search', q='耳机') }}">手机数码</a>
+    <a href="{{ url_for('web.search', q='键盘') }}">电脑办公</a>
+    <a href="#">家用电器</a>
+    <a href="#">服饰鞋包</a>
+    <a href="#">美妆个护</a>
+    <a href="{{ url_for('web.orders') }}" class="{{ 'on' if active=='orders' }}">我的订单</a>
+  </div>
+</nav>
+
+{% with msgs = get_flashed_messages(with_categories=true) %}
+  {% if msgs %}
+  <div class="wrap flash-wrap">
+    {% for cat, m in msgs %}
+      <div class="flash {{ cat }}">{{ m }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+{% block body %}{% endblock %}
+
+<footer class="footer">
+  <div class="wrap">
+    <p>淘淘商城 · 用于功能测试与接口自动化教学的被测系统</p>
+    <p class="muted">Flask + MySQL · 服务端渲染 · {{ cart_badge }} 件商品在购物车</p>
+  </div>
+</footer>
+
+</body>
+</html>

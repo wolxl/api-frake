@@ -8,3 +8,6 @@ mall_server/config.py
 
 app_ci.log
 app_ci.log.err
+
+app_web.log
+app_web.err.log

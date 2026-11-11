@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}购物车 - 淘淘商城{% endblock %}
+
+{% block body %}
+<div class="wrap">
+  <div class="crumb"><a href="{{ url_for('web.index') }}">首页</a> › 购物车</div>
+
+  <div class="sec-head">
+    <h3>我的购物车</h3>
+    <span class="muted">{{ rows|length }} 种商品</span>
+  </div>
+
+  {% if rows|length == 0 %}
+    <div class="empty-box">
+      <p class="empty-ico">🛒</p>
+      <p>购物车还是空的</p>
+      <p class="muted"><a href="{{ url_for('web.index') }}">去逛逛</a></p>
+    </div>
+  {% else %}
+  <table class="tbl">
+    <thead>
+      <tr>
+        <th>商品</th><th class="num">单价</th><th class="num">数量</th>
+        <th class="num">小计</th><th class="num">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>
+          <div class="tbl-prod">
+            <span class="thumb">{{ r.name|emoji }}</span>
+            <a href="{{ url_for('web.product_detail', pid=r.product_id) }}">{{ r.name }}</a>
+          </div>
+        </td>
+        <td class="num">￥{{ r.price|yuan }}</td>
+        <td class="num">
+          {{ r.quantity }}
+          {% if r.quantity > r.stock %}<span class="warn">库存不足</span>{% endif %}
+        </td>
+        <td class="num strong">￥{{ (r.price|float * r.quantity)|round(2) }}</td>
+        <td class="num">
+          <form action="{{ url_for('web.cart_remove') }}" method="post">
+            <input type="hidden" name="cart_id" value="{{ r.id }}">
+            <button type="submit" class="link-btn">删除</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="settle">
+    <div class="settle-left">
+      <a href="{{ url_for('web.index') }}">继续购物</a>
+    </div>
+    <div class="settle-right">
+      <span>合计（不含运费）：</span>
+      <span class="total">￥{{ total|round(2) }}</span>
+      <form action="{{ url_for('web.order_submit') }}" method="post">
+        <button type="submit" class="btn-buy big">提交订单</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

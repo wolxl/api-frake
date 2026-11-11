@@ -23,13 +23,21 @@
 """
 
 import hashlib
+import os
 import uuid
 
 from flask import Flask, jsonify, request
 
 import db
+from web import web_bp
 
 app = Flask(__name__)
+
+# 页面登录用 session cookie，必须有 secret_key（生产放环境变量）
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-secret-change-me")
+
+# 注册 Web 前端：给同一个被测系统补一条「功能测试」线
+app.register_blueprint(web_bp)
 
 # token -> user_id（进程内存；真实项目应换 Redis 或 JWT）
 tokens = {}
