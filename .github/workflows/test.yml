@@ -14,6 +14,10 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# GITHUB_TOKEN 默认只读，发布 Pages 需要写权限
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
